@@ -1,0 +1,38 @@
+{
+  "detection_P": 1.0,
+  "detection_R": 1.0,
+  "detection_F1": 1.0,
+  "fp_rate_peaks": 0.0,
+  "macro_F1_type": 0.6196660482374768,
+  "detection_FPR": 0.0,
+  "detection_PR_AUC": 1.0,
+  "confusion_verdict": {
+    "order": [
+      "normal",
+      "pic_legitime",
+      "attaque"
+    ],
+    "matrix": [
+      [
+        161,
+        0,
+        0
+      ],
+      [
+        0,
+        21,
+        0
+      ],
+      [
+        0,
+        0,
+        61
+      ]
+    ]
+  },
+  "source_P": 1.0,
+  "source_R": 1.0,
+  "target_top1": 1.0,
+  "target_top3": 1.0,
+  "n_windows": 243
+}

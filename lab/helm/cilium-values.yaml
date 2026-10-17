@@ -1,0 +1,26 @@
+# Cilium as CNI with Hubble flow visibility (Phase 2).
+# Pinned chart: cilium/cilium 1.18.15 (see lab/versions.env).
+kubeProxyReplacement: true
+k8sServiceHost: gnn-lab-control-plane
+k8sServicePort: 6443
+ipam:
+  mode: kubernetes
+# Images are referenced by tag (not digest) so that `kind load` pre-loaded images match.
+image: {useDigest: false}
+operator: {replicas: 1, image: {useDigest: false}}
+l7Proxy: false          # L3/L4 flows are sufficient; avoids the Envoy DaemonSet on a small host
+envoy: {enabled: false}
+hubble:
+  enabled: true
+  relay:
+    enabled: true
+    image: {useDigest: false}
+  ui: {enabled: false}
+  metrics:
+    enableOpenMetrics: false
+    enabled: [dns, drop, tcp, flow, port-distribution, icmp]
+    serviceMonitor: {enabled: false}
+prometheus:
+  enabled: true          # cilium-agent metrics on :9962, scraped via pod annotations
+resources:
+  requests: {cpu: 100m, memory: 256Mi}

@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Traffic window",
+  "type": "object",
+  "required": ["fenetre", "origine", "scenario", "noeuds", "aretes", "labels"],
+  "properties": {
+    "fenetre": {
+      "type": "object",
+      "required": ["debut", "duree_s", "pas_s"],
+      "properties": {
+        "debut": {"type": "string"},
+        "duree_s": {"type": "number"},
+        "pas_s": {"type": "number"}
+      }
+    },
+    "origine": {"type": "string", "enum": ["labo", "cic_ddos2019", "cic_ids2017", "unsw_nb15", "ctu13"]},
+    "scenario": {"type": "string"},
+    "noeuds": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "features"],
+        "properties": {
+          "id": {"type": "string"},
+          "role": {"type": "string", "enum": ["externe", "interne"]},
+          "type": {"type": "string", "enum": ["externe", "gateway", "service", "database", "cache", "pod", "k8s_node"]},
+          "features": {"type": "object"}
+        }
+      }
+    },
+    "aretes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["src", "dst", "type"],
+        "properties": {
+          "src": {"type": "string"},
+          "dst": {"type": "string"},
+          "type": {"type": "string", "enum": ["flux", "dependance"]},
+          "octets": {"type": "number"},
+          "paquets": {"type": "number"},
+          "flux": {"type": "number"}
+        }
+      }
+    },
+    "labels": {
+      "type": "object",
+      "required": ["verdict", "type"],
+      "properties": {
+        "verdict": {"type": "string", "enum": ["normal", "pic_legitime", "attaque"]},
+        "type": {"type": "string", "enum": ["ddos_udp_flood", "ddos_icmp_flood", "ddos_syn_flood", "ddos_http_flood", "slowloris", "slow_post", "bruteforce_distribue", "scan_distribue", "none"]},
+        "cibles": {"type": "array", "items": {"type": "string"}},
+        "sources": {"type": "array", "items": {"type": "string"}},
+        "impactes": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}

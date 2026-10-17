@@ -1,0 +1,10 @@
+id: real-peak
+verdict: pic_legitime      # a legitimate flash crowd, NOT an attack
+type: none
+target: frontend
+target_port: 80
+warmup_s: 30
+attack_s: 90
+cooldown_s: 30
+background: {pods: 3, rate: 6, subnets: 3}
+attack: {mode: benign, pods: 12, rate: 20, subnets: 6, path: /}   # many clients, moderate rate, diverse paths

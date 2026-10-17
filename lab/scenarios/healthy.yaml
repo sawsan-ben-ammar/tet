@@ -1,0 +1,10 @@
+id: real-healthy
+verdict: normal
+type: none
+target: frontend
+target_port: 80
+warmup_s: 30
+attack_s: 90        # "event" phase is just steady benign load here
+cooldown_s: 30
+background: {pods: 4, rate: 8, subnets: 3}
+# no attack block -> stays normal throughout

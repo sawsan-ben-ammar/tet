@@ -1,0 +1,20 @@
+# Grafana for the lab (Phase 2). Chart: grafana/grafana.
+adminUser: admin
+adminPassword: admin            # lab only; closed network
+persistence: {enabled: false}
+resources: {requests: {cpu: 20m, memory: 64Mi}, limits: {cpu: 200m, memory: 192Mi}}
+service: {type: ClusterIP}
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        url: http://prometheus-server.monitoring.svc:80
+        access: proxy
+        isDefault: true
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+      - {name: gnn-lab, orgId: 1, folder: "", type: file, disableDeletion: false, options: {path: /var/lib/grafana/dashboards/gnn-lab}}

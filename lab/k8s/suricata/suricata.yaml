@@ -1,0 +1,58 @@
+# Suricata two-probe sensor (Phase 2). hostNetwork DaemonSet; NET_ADMIN+NET_RAW
+# for packet capture. Two containers:
+#   ids1 (perimeter): af-packet on eth0  -> node/edge view, real external IPs
+#   ids2 (internal):  libpcap on "any"   -> all pod-to-pod veths on this node
+# EVE JSON is written per-probe under the hostPath /var/log/suricata, which the
+# Phase-3 collector reads. Visibility limits are documented in lab/README.
+apiVersion: v1
+kind: Namespace
+metadata: {name: security, labels: {gnn-lab/app: suricata}}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata: {name: suricata-cfg, namespace: security}
+data:
+  dos-home.rules: |
+__RULES__
+  suricata.yaml.tmpl: |
+__TMPL__
+  entrypoint.sh: |
+__ENTRY__
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata: {name: suricata, namespace: security, labels: {gnn-lab/app: suricata}}
+spec:
+  selector: {matchLabels: {app: suricata}}
+  template:
+    metadata: {labels: {app: suricata, gnn-lab/app: suricata}}
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      tolerations: [{operator: Exists}]
+      volumes:
+        - {name: cfg, configMap: {name: suricata-cfg, defaultMode: 0755}}
+        - {name: evelog, hostPath: {path: /var/log/suricata, type: DirectoryOrCreate}}
+      containers:
+        - name: ids1
+          image: IMAGE_PLACEHOLDER
+          command: ["/bin/sh","/cfg/entrypoint.sh"]
+          env: [{name: PROBE, value: ids1}, {name: CAPTURE_MODE, value: afpacket}, {name: IFACE, value: eth0}, {name: CLUSTER_ID, value: "97"}]
+          securityContext: {capabilities: {add: [NET_ADMIN, NET_RAW, SYS_NICE]}}
+          resources: {requests: {cpu: 50m, memory: 128Mi}, limits: {cpu: 500m, memory: 384Mi}}
+          volumeMounts:
+            - {name: cfg, mountPath: /cfg}
+            - {name: cfg, mountPath: /etc/suricata/suricata.yaml.tmpl, subPath: suricata.yaml.tmpl}
+            - {name: cfg, mountPath: /etc/suricata/rules/dos-home.rules, subPath: dos-home.rules}
+            - {name: evelog, mountPath: /var/log/suricata}
+        - name: ids2
+          image: IMAGE_PLACEHOLDER
+          command: ["/bin/sh","/cfg/entrypoint.sh"]
+          env: [{name: PROBE, value: ids2}, {name: CAPTURE_MODE, value: pcap}, {name: IFACE, value: any}]
+          securityContext: {capabilities: {add: [NET_ADMIN, NET_RAW, SYS_NICE]}}
+          resources: {requests: {cpu: 50m, memory: 128Mi}, limits: {cpu: 500m, memory: 384Mi}}
+          volumeMounts:
+            - {name: cfg, mountPath: /cfg}
+            - {name: cfg, mountPath: /etc/suricata/suricata.yaml.tmpl, subPath: suricata.yaml.tmpl}
+            - {name: cfg, mountPath: /etc/suricata/rules/dos-home.rules, subPath: dos-home.rules}
+            - {name: evelog, mountPath: /var/log/suricata}

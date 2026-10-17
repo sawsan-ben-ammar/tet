@@ -1,0 +1,10 @@
+id: real-syn-flood
+verdict: attaque
+type: ddos_syn_flood
+target: frontend
+target_port: 80
+warmup_s: 30
+attack_s: 90
+cooldown_s: 30
+background: {pods: 3, rate: 6, subnets: 3}
+attack: {mode: synflood, pods: 12, rate: 80, subnets: 6}

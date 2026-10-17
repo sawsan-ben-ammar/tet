@@ -1,0 +1,38 @@
+{
+  "detection_P": 1.0,
+  "detection_R": 0.35714285714285715,
+  "detection_F1": 0.5263157894736842,
+  "fp_rate_peaks": 0.0,
+  "macro_F1_type": 0.2631578947368421,
+  "detection_FPR": 0.0,
+  "detection_PR_AUC": 0.9597,
+  "confusion_verdict": {
+    "order": [
+      "normal",
+      "pic_legitime",
+      "attaque"
+    ],
+    "matrix": [
+      [
+        53,
+        0,
+        0
+      ],
+      [
+        18,
+        0,
+        0
+      ],
+      [
+        9,
+        0,
+        5
+      ]
+    ]
+  },
+  "source_P": 1.0,
+  "source_R": 1.0,
+  "target_top1": 0.35714285714285715,
+  "target_top3": 0.35714285714285715,
+  "n_windows": 85
+}

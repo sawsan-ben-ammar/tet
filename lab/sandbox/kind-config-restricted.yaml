@@ -1,0 +1,22 @@
+# Same cluster as lab/kind-config.yaml, plus the CAP_SYS_RESOURCE workaround
+# (see runc-oom-wrap.sh). Paths are relative to the repository root, so run
+# `kind create cluster` from there.
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: gnn-lab
+networking:
+  disableDefaultCNI: true
+  kubeProxyMode: none
+containerdConfigPatches:
+  - |-
+    [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.runc.options]
+      BinaryName = "/opt/gnn-sandbox/runc-oom-wrap.sh"
+nodes:
+  - role: control-plane
+    labels: {lab-role: all-in-one}
+    extraMounts:
+      # mount the directory, not the file: editors replace files (new inode),
+      # which a single-file bind mount would not see
+      - hostPath: lab/sandbox
+        containerPath: /opt/gnn-sandbox
+        readOnly: true

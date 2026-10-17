@@ -1,0 +1,27 @@
+# Local run of the API + demo. Train the models first (make train), then:
+#     docker compose -f deploy/docker-compose.yml up --build
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    ports: ["8000:8000"]
+    volumes:
+      - ../model/artifacts:/app/model/artifacts:ro
+      - ../ids/artifacts:/app/ids/artifacts:ro
+      - ../data/captures:/app/data/captures:ro     # for /incidents and /captures
+      - ../reports:/app/reports:ro                 # for /metrics/evaluation
+    environment:
+      - GNN_ARTIFACTS=/app/model/artifacts
+      - IDS_IA_MODEL=/app/ids/artifacts/ia.json
+      - GNN_CAPTURES=/app/data/captures
+      - GNN_REPORTS=/app/reports
+
+  demo:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.demo
+    ports: ["8501:8501"]
+    volumes:
+      - ../model/artifacts:/app/model/artifacts:ro
+    depends_on: [api]

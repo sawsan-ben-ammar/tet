@@ -1,0 +1,28 @@
+name: ci
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install (CPU torch)
+        run: |
+          python -m pip install --upgrade pip
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install torch_geometric
+          pip install -r requirements.txt
+      # CI has no Kubernetes lab, so it validates the OFFLINE path only:
+      # synthetic dataset -> schema validation -> a quick synthetic model (for the
+      # plumbing tests) -> the full test suite. The real-data path (lab capture,
+      # training, correlation) is covered by the phase reports and reproduced with
+      # the lab scripts on a host with Docker/Kind.
+      - name: Generate a small synthetic dataset
+        run: python -m data_prep.generate_dataset --scenarios 60 --out data/windows/synth
+      - name: Validate windows
+        run: python schema/validate.py 'data/windows/synth/*.json'
+      - name: Train a quick model for the plumbing tests
+        run: python -m model.train --windows data/windows/synth --epochs 8 --out model/artifacts
+      - name: Tests
+        run: python -m pytest -q

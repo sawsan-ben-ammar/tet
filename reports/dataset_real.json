@@ -1,0 +1,177 @@
+{
+  "n_captures": 12,
+  "n_windows": 309,
+  "origine_distribution": {
+    "labo": 309
+  },
+  "verdict_distribution": {
+    "normal": 171,
+    "attaque": 92,
+    "pic_legitime": 46
+  },
+  "attack_type_distribution": {
+    "ddos_http_flood": 46,
+    "ddos_syn_flood": 46
+  },
+  "class_imbalance_ratio_max_min": 3.72,
+  "nodes_per_window": {
+    "min": 11,
+    "max": 20,
+    "mean": 16.4
+  },
+  "edges_per_window": {
+    "min": 15,
+    "max": 69,
+    "mean": 54.1
+  },
+  "external_nodes_per_window_mean": 4.6,
+  "duplicate_windows": 0,
+  "missing_feature_rate": {
+    "paquets_s": 0.721,
+    "octets_s": 0.358,
+    "requetes_s": 0.0,
+    "nb_flux": 0.0,
+    "connexions_ouvertes": 0.721,
+    "ratio_syn": 0.0,
+    "duree_moy_connexion": 1.0,
+    "nb_sources_uniques": 0.0,
+    "nb_destinations": 0.0,
+    "nb_ports": 0.0,
+    "entropie_url": 1.0,
+    "entropie_ua": 1.0,
+    "variabilite_intervalles": 1.0,
+    "taille_moy_paquets": 1.0,
+    "cpu": 0.365,
+    "memoire": 0.329,
+    "latence_p95": 1.0,
+    "taux_erreurs": 0.279,
+    "nb_alertes": 0.0,
+    "gravite_max_alerte": 0.0,
+    "instant_premiere_anomalie": 0.0
+  },
+  "per_capture": {
+    "real-healthy": {
+      "windows": 31,
+      "verdicts": {
+        "normal": 31
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T11:50:55.000000Z",
+      "t_last": "2026-10-17T11:53:25.000000Z"
+    },
+    "real-healthy-r2": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 23
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:01:35.000000Z",
+      "t_last": "2026-10-17T12:03:25.000000Z"
+    },
+    "real-healthy-r3": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 23
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:09:50.000000Z",
+      "t_last": "2026-10-17T12:11:40.000000Z"
+    },
+    "real-http-flood": {
+      "windows": 31,
+      "verdicts": {
+        "normal": 13,
+        "attaque": 18
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T11:56:10.000000Z",
+      "t_last": "2026-10-17T11:58:40.000000Z"
+    },
+    "real-http-flood-r2": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "attaque": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:05:40.000000Z",
+      "t_last": "2026-10-17T12:07:30.000000Z"
+    },
+    "real-http-flood-r3": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "attaque": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:14:00.000000Z",
+      "t_last": "2026-10-17T12:15:50.000000Z"
+    },
+    "real-peak": {
+      "windows": 31,
+      "verdicts": {
+        "normal": 13,
+        "pic_legitime": 18
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T11:53:30.000000Z",
+      "t_last": "2026-10-17T11:56:00.000000Z"
+    },
+    "real-peak-r2": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "pic_legitime": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:03:35.000000Z",
+      "t_last": "2026-10-17T12:05:25.000000Z"
+    },
+    "real-peak-r3": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "pic_legitime": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:11:55.000000Z",
+      "t_last": "2026-10-17T12:13:45.000000Z"
+    },
+    "real-syn-flood": {
+      "windows": 32,
+      "verdicts": {
+        "normal": 14,
+        "attaque": 18
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T11:58:50.000000Z",
+      "t_last": "2026-10-17T12:01:25.000000Z"
+    },
+    "real-syn-flood-r2": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "attaque": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:07:45.000000Z",
+      "t_last": "2026-10-17T12:09:35.000000Z"
+    },
+    "real-syn-flood-r3": {
+      "windows": 23,
+      "verdicts": {
+        "normal": 9,
+        "attaque": 14
+      },
+      "origine": "labo",
+      "t_first": "2026-10-17T12:16:05.000000Z",
+      "t_last": "2026-10-17T12:17:55.000000Z"
+    }
+  },
+  "split_preview": {
+    "train_windows": 201,
+    "val_windows": 23,
+    "test_windows": 85,
+    "method": "grouped by capture/scenario id (no window shared across splits)"
+  }
+}

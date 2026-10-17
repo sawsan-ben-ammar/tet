@@ -1,0 +1,22 @@
+# A scenario is a declarative description of one run. The runner reads it, drives the
+# standard load/stress tool named in `tool` against the in-cluster ingress ONLY, and
+# records the labels. This file is the label source of truth; it carries no attack
+# code itself.
+#
+# Tools are the standard ones named in the brief (Section 13), run with their own
+# published documentation, always rate-capped and always against the in-cluster
+# target. The generators run on the isolated `generators` node behind the
+# default-deny egress policy.
+id: scn-example-syn
+verdict: attaque            # normal | pic_legitime | attaque
+type: ddos_syn_flood
+target: ingress            # always an in-cluster service
+botnet:
+  pods: 40                 # generator pods, on the generators node
+  subnets: 8               # simulated /24 groupings (see lab/README: sim-subnet)
+  rate_per_pod: 200        # capped in the tool invocation
+tool: hping3               # standard tool; invoked per its own docs, rate-limited
+warmup_s: 120              # normal Locust traffic only
+attack_s: 300
+cooldown_s: 120
+background_users: 150      # Locust users running throughout

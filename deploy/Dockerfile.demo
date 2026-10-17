@@ -1,0 +1,17 @@
+# Demo image: the Streamlit app.
+FROM python:3.11-slim
+
+WORKDIR /app
+RUN pip install --no-cache-dir torch --index-url https://download.pytorch.org/whl/cpu
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY schema ./schema
+COPY data_prep ./data_prep
+COPY model ./model
+COPY ids ./ids
+COPY demo ./demo
+
+ENV PYTHONUNBUFFERED=1
+EXPOSE 8501
+CMD ["streamlit", "run", "demo/app.py", "--server.address=0.0.0.0", "--server.port=8501"]

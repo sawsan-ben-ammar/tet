@@ -1,0 +1,31 @@
+# Isolation for the lab (the core safety control of Phase 8).
+# Default-deny egress in the generators namespace: a generator/attacker pod may
+# reach ONLY in-cluster services and cluster DNS, never anything outside the
+# cluster. This is what keeps every authorized test inside the lab.
+#
+# Verify before every session (also run by scripts/60-isolation.sh --check):
+#   kubectl -n generators run t --image=curlimages/curl --rm -it --restart=Never -- \
+#     sh -c 'curl -m3 https://example.com; echo " <- must FAIL"; \
+#            curl -m3 http://frontend.boutique; echo " <- must SUCCEED"'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: default-deny-egress, namespace: generators}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to: [{namespaceSelector: {}}]                       # in-cluster only
+    - to: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}}]
+      ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]
+---
+# Belt and braces: the app namespace may talk in-cluster + DNS, nothing external.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata: {name: default-deny-egress, namespace: boutique}
+spec:
+  podSelector: {}
+  policyTypes: [Egress]
+  egress:
+    - to: [{namespaceSelector: {}}]
+    - to: [{namespaceSelector: {matchLabels: {kubernetes.io/metadata.name: kube-system}}}]
+      ports: [{protocol: UDP, port: 53}, {protocol: TCP, port: 53}]

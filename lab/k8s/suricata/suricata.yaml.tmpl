@@ -1,0 +1,36 @@
+%YAML 1.1
+---
+# Suricata config for one lab probe (Phase 2). The DaemonSet entrypoint
+# substitutes __PROBE__ and injects the capture stanza (__CAPTURE__), so the
+# same template serves the perimeter probe (af-packet on eth0) and the internal
+# probe (libpcap on "any", which on a single kind node sees all pod veths).
+vars:
+  address-groups:
+    HOME_NET: "[10.244.0.0/16,10.96.0.0/12,172.18.0.0/16]"
+    EXTERNAL_NET: "!$HOME_NET"
+  port-groups:
+    HTTP_PORTS: "80"
+
+__CAPTURE__
+
+default-log-dir: /var/log/suricata/__PROBE__
+outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: eve.json
+      types:
+        - alert: {metadata: yes, xff: {enabled: yes, mode: extra-data, header: X-Forwarded-For}}
+        - http: {extended: yes}
+        - flow
+        - stats: {enabled: yes, interval: 10}
+logging:
+  default-log-level: notice
+  outputs:
+    - console: {enabled: yes}
+app-layer:
+  protocols: {http: {enabled: yes}, tls: {enabled: yes}, dns: {enabled: yes}}
+default-rule-path: /etc/suricata/rules
+rule-files: [dos-home.rules]
+host-mode: sniffer-only
+runmode: workers

@@ -1,0 +1,10 @@
+id: real-http-flood
+verdict: attaque
+type: ddos_http_flood
+target: frontend
+target_port: 80
+warmup_s: 30
+attack_s: 90
+cooldown_s: 30
+background: {pods: 3, rate: 6, subnets: 3}
+attack: {mode: httpflood, pods: 12, rate: 60, subnets: 6, path: /}   # rate-capped per pod

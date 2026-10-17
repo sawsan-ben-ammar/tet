@@ -1,0 +1,16 @@
+# Isolated single-host Kubernetes lab (Phase 2).
+# One all-in-one node: the reference host for this project has 2 vCPU / 8 GiB,
+# and every extra kind node costs a kubelet + containerd. Isolation of the
+# traffic generators is enforced by namespaces + Cilium NetworkPolicies
+# (lab/k8s/network-policies.yaml), not by node placement.
+# On a restricted host lacking CAP_SYS_RESOURCE use
+# lab/sandbox/kind-config-restricted.yaml instead (10-cluster.sh picks it).
+kind: Cluster
+apiVersion: kind.x-k8s.io/v1alpha4
+name: gnn-lab
+networking:
+  disableDefaultCNI: true      # Cilium provides the CNI + Hubble flow visibility
+  kubeProxyMode: none          # Cilium kube-proxy replacement
+nodes:
+  - role: control-plane
+    labels: {lab-role: all-in-one}
